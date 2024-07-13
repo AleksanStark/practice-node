@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import { env } from "./utils/env.js";
-import { getAllProducts } from "./controllers/products.js";
+import router from "./routers/products.js";
 
 const PORT = Number(env("PORT", "3000"));
 
@@ -12,13 +12,13 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
 
-  app.get("/products", getAllProducts);
+  app.use(router);
 
-  app.use((req, res, next) => {
+  app.use((req, res, _next) => {
     res.status(404).json({ message: "Not Found" });
   });
 
-  app.use((error, req, res, next) => {
+  app.use((error, req, res, _next) => {
     console.error(error);
     res.status(500).json({
       message: "Internal Server Error!",
